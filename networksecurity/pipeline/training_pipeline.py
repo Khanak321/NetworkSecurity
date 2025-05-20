@@ -46,8 +46,8 @@ class TrainingPipeline:
             return data_ingestion_artifact
         
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
-        
+            raise NetworkSecurityException(str(e), sys.exc_info())
+
     def start_data_validation(self,data_ingestion_artifact:DataIngestionArtifact):
         try:
             data_validation_config=DataValidationConfig(training_pipeline_config=self.training_pipeline_config)
@@ -56,7 +56,7 @@ class TrainingPipeline:
             data_validation_artifact=data_validation.initiate_data_validation()
             return data_validation_artifact
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
+            raise NetworkSecurityException(str(e), sys.exc_info())
         
     def start_data_transformation(self,data_validation_artifact:DataValidationArtifact):
         try:
@@ -67,8 +67,8 @@ class TrainingPipeline:
             data_transformation_artifact = data_transformation.initiate_data_transformation()
             return data_transformation_artifact
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
-        
+            raise NetworkSecurityException(str(e), sys.exc_info())
+
     def start_model_trainer(self,data_transformation_artifact:DataTransformationArtifact)->ModelTrainerArtifact:
         try:
             self.model_trainer_config: ModelTrainerConfig = ModelTrainerConfig(
@@ -85,7 +85,7 @@ class TrainingPipeline:
             return model_trainer_artifact
 
         except Exception as e:
-            raise NetworkSecurityException(e, sys)
+            raise NetworkSecurityException(str(e), sys.exc_info())
 
     ## local artifact is going to s3 bucket    
     def sync_artifact_dir_to_s3(self):
@@ -93,7 +93,7 @@ class TrainingPipeline:
             aws_bucket_url = f"s3://{TRAINING_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestamp}"
             self.s3_sync.sync_folder_to_s3(folder = self.training_pipeline_config.artifact_dir,aws_bucket_url=aws_bucket_url)
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
+                    raise NetworkSecurityException(str(e), sys.exc_info())
         
     ## local final model is going to s3 bucket 
         
@@ -102,7 +102,7 @@ class TrainingPipeline:
             aws_bucket_url = f"s3://{TRAINING_BUCKET_NAME}/final_model/{self.training_pipeline_config.timestamp}"
             self.s3_sync.sync_folder_to_s3(folder = self.training_pipeline_config.model_dir,aws_bucket_url=aws_bucket_url)
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
+                   raise NetworkSecurityException(str(e), sys.exc_info())
         
     
     
@@ -118,6 +118,6 @@ class TrainingPipeline:
             
             return model_trainer_artifact
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
+            raise NetworkSecurityException(str(e), sys.exc_info())
         
     
