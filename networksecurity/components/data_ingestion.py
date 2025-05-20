@@ -4,6 +4,8 @@ from networksecurity.logging.logger import logging
 from networksecurity.entity.config_entity import DataIngestionConfig
 from networksecurity.entity.artifact_entity import DataIngestionArtifact
 
+
+
 import os
 import sys
 import numpy as np
@@ -83,6 +85,7 @@ class DataIngestion:
                 trained_file_path=self.data_ingestion_config.training_file_path,
                 test_file_path=self.data_ingestion_config.testing_file_path
             )
+            
             return dataingestionartifact
         except Exception as e:
             raise NetworkSecurityException(str(e), sys.exc_info())
